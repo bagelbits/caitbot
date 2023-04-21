@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Apparatus {
+  id    String  @id @default(cuid())
+  name  String
+  Trick Trick[]
+}
+
+model Trick {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  video_url   String?
+  Apparatus   Apparatus[]
+  createdAt   DateTime    @default(now()) @map(name: "created_at")
+  updatedAt   DateTime    @updatedAt @map(name: "updated_at")
+}
