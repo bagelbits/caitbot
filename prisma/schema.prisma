@@ -11,9 +11,19 @@ datasource db {
 }
 
 model Apparatus {
-  id    String  @id @default(cuid())
-  name  String
-  Trick Trick[]
+  id        String   @id @default(cuid())
+  name      String
+  Trick     Trick[]
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+}
+
+model TrickType {
+  id        String   @id @default(cuid())
+  name      String
+  Trick     Trick[]
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 }
 
 model Trick {
@@ -22,6 +32,8 @@ model Trick {
   description String
   video_url   String?
   Apparatus   Apparatus[]
+  trickTypeId String?
+  trickType   TrickType?  @relation(fields: [trickTypeId], references: [id])
   createdAt   DateTime    @default(now()) @map(name: "created_at")
   updatedAt   DateTime    @updatedAt @map(name: "updated_at")
 }
