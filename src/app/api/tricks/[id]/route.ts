@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../lib/prisma";
 
-export async function GET(request: Request) {
-  const id = request.url.slice(request.url.lastIndexOf("/") + 1);
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
   const tricks = await prisma.trick.findUnique({
     where: { id },
     include: {
