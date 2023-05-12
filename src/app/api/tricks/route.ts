@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
+
+export type Trick = {
+  id: string,
+  name: string
+}
 
 export async function GET() {
   const tricks = await prisma.trick.findMany({
@@ -8,5 +13,5 @@ export async function GET() {
       name: true,
     },
   });
-  return new NextResponse(JSON.stringify(tricks), { status: 200 });
+  return NextResponse.json(tricks);
 }
