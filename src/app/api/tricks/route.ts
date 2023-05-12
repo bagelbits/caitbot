@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 
-export type Trick = {
+export type TrickResource = {
   id: string,
   name: string
 }

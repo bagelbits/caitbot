@@ -1,6 +1,24 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma"
 
+export type Trick = {
+  id: string,
+  name: string,
+  description: string,
+  video_url: string | null,
+  trickTypeId: string,
+  createdAt: string,
+  updatedAt: string,
+  trickType: {
+    id: string,
+    name: string,
+  }
+  "Apparatus": {
+    id: string,
+    name: string,
+  }[]
+}
+
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
