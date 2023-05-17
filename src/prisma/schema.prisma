@@ -30,7 +30,7 @@ model Trick {
   id          String      @id @default(cuid())
   name        String
   description String
-  video_url   String?
+  youtubeId   String?
   Apparatus   Apparatus[]
   trickTypeId String?
   trickType   TrickType?  @relation(fields: [trickTypeId], references: [id])
