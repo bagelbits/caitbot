@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import TrickModal from "./trickModal";
+import TrickSequence from "./trickSequence";
 import { TrickResource } from "../app/api/tricks/route";
-import { Trick } from "../app/api/tricks/[id]/route";
 
 type Props = {
   tricks: TrickResource[];
@@ -10,9 +9,7 @@ type Props = {
 
 const SequenceGenerator = (props: Props) => {
   const [sequence, setSequence] = useState<TrickResource[]>([]);
-  const [tricks, setTricks] = useState<Trick[]>([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [trickModalId, setTrickModalId] = useState("");
+  const [showSequence, setShowSequence] = useState(false);
 
   function generateSequence() {
     const tricks = props.tricks;
@@ -21,39 +18,21 @@ const SequenceGenerator = (props: Props) => {
       newSequence.push(tricks[Math.floor(Math.random() * tricks.length)]);
     }
     setSequence(newSequence);
+    setShowSequence(true);
   }
-
-  const openTrickModal = (trickId: string) => {
-    setTrickModalId(trickId);
-    setModalIsOpen(true);
-  };
-  const closeTrickModal = () => {
-    setTrickModalId("");
-    setModalIsOpen(false);
-  };
 
   return (
     <div>
-      <TrickModal
-        open={modalIsOpen}
-        trickId={trickModalId}
-        onClose={closeTrickModal}
-      />
-      <button
-        className="bg-emerald-500 hover:bg-emerald-700"
-        onClick={generateSequence}
-      >
-        Generate!
-      </button>
-      <ul role="list" className="divide-y divide-slate-200 p-10">
-        {sequence.map((trick, index) => (
-          <li key={index} className="flex py-4 first:pt-0 last:pb-0">
-            <button onClick={() => openTrickModal(trick.id)}>
-              {trick.name}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="mx-auto my-10 flex w-1/2 p-4 shadow">
+        <a
+          href="#"
+          className="rounded-full bg-emerald-500 px-5 py-2 font-semibold leading-5 text-white hover:bg-emerald-700"
+          onClick={generateSequence}
+        >
+          Generate!
+        </a>
+      </div>
+      {showSequence ? <TrickSequence sequence={sequence} /> : null}
     </div>
   );
 };
