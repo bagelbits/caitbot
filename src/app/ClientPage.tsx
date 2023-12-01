@@ -1,17 +1,12 @@
 'use client'
 
 import Layout from '@/components/General/Layout'
-import { Typography } from '@mui/material'
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Cait Bot',
-}
+import SequenceGenerator from '@/components/SequenceGenerator'
 
 const Page = () => {
   return (
     <Layout>
-      <Typography>Hello world!</Typography>
+      <SequenceGenerator />
     </Layout>
   )
 }
