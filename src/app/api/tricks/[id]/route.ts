@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../lib/prisma";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export type Trick = {
   id: string;
@@ -19,10 +21,7 @@ export type Trick = {
   }[];
 };
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   const id = params.id;
   const tricks = await prisma.trick.findUnique({
     where: { id },
