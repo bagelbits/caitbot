@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { NextResponse } from 'next/server'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export async function GET(request: Request) {
   const trickTypes = await prisma.trickType.findMany({
@@ -9,6 +9,6 @@ export async function GET(request: Request) {
       id: true,
       name: true,
     },
-  });
-  return new NextResponse(JSON.stringify(trickTypes), { status: 200 });
+  })
+  return new NextResponse(JSON.stringify(trickTypes), { status: 200 })
 }

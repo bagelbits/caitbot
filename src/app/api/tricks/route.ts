@@ -1,12 +1,12 @@
-import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { NextResponse } from 'next/server'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export type TrickResource = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 export async function GET() {
   const tricks = await prisma.trick.findMany({
@@ -14,6 +14,6 @@ export async function GET() {
       id: true,
       name: true,
     },
-  });
-  return NextResponse.json(tricks);
+  })
+  return NextResponse.json(tricks)
 }

@@ -1,28 +1,28 @@
-import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { NextResponse } from 'next/server'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export type Trick = {
-  id: string;
-  name: string;
-  description: string;
-  youtubeId: string | null;
-  trickTypeId: string;
-  createdAt: string;
-  updatedAt: string;
+  id: string
+  name: string
+  description: string
+  youtubeId: string | null
+  trickTypeId: string
+  createdAt: string
+  updatedAt: string
   trickType: {
-    id: string;
-    name: string;
-  };
+    id: string
+    name: string
+  }
   Apparatus: {
-    id: string;
-    name: string;
-  }[];
-};
+    id: string
+    name: string
+  }[]
+}
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const id = params.id;
+  const id = params.id
   const tricks = await prisma.trick.findUnique({
     where: { id },
     include: {
@@ -39,6 +39,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
         },
       },
     },
-  });
-  return new NextResponse(JSON.stringify(tricks), { status: 200 });
+  })
+  return new NextResponse(JSON.stringify(tricks), { status: 200 })
 }
