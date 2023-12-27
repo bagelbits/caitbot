@@ -14,3 +14,8 @@ export type ListTrickTypeResult = {
 }
 
 // Trick
+
+export type ListTrickResult = {
+  id: string
+  name: string
+}

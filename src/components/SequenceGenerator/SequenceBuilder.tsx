@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react'
 import {
   Autocomplete,
-  AutocompleteRenderInputParams,
+  Box,
   Button,
   Chip,
   CircularProgress,
@@ -9,8 +9,10 @@ import {
   Grid,
   ListItem,
   TextField,
+  Typography,
 } from '@mui/material'
 import useSWR from 'swr'
+import ErrorIcon from '@mui/icons-material/Error'
 
 import { fetcher } from '@/utils/fetcher'
 import { ListApparatusResult, ListTrickTypeResult } from '@/types/api'
@@ -32,6 +34,7 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
   } = useSWR('/api/trick_types', fetcher)
   const [selectedApparatus, setSelectedApparatus] = useState<ListApparatusResult | null>(null)
   const [sequence, setSequence] = useState<ListTrickTypeResult[]>([])
+  const [inputError, setInputError] = useState(false)
 
   if (apparatusesError || trickTypesError) return <ErrorState />
   if (apparatusesIsLoading || trickTypesIsLoading) return <LoadingState />
@@ -65,7 +68,6 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
         <Autocomplete
           color="secondary"
           options={apparatuses as ListApparatusResult[]}
-          defaultValue={apparatuses[0]}
           getOptionLabel={(option) => option.name}
           onChange={onChange}
           renderOption={(props, option, { selected }) => {
@@ -75,7 +77,9 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
               </ListItem>
             )
           }}
-          renderInput={(params) => <TextField {...params} color="secondary" label="Apparatuses" />}
+          renderInput={(params) => (
+            <TextField {...params} color="secondary" label="Apparatuses" required error={inputError} />
+          )}
         />
       </Grid>
       <Grid item xs={12} sx={{ my: 2 }}>
@@ -100,22 +104,20 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
           renderInput={(params) => <TextField label="Add Tags" {...params} />}
         />
       </Grid>
-      {trickTypes && !!trickTypes.length && (
-        <Grid item>
-          {trickTypes?.map((trickType: ListApparatusResult) => (
-            <Button
-              key={trickType.id}
-              variant="contained"
-              onClick={() => {
-                addToSquence(trickType)
-              }}
-              sx={{ mr: 2 }}
-            >
-              {trickType.name}
-            </Button>
-          ))}
-        </Grid>
-      )}
+      <Grid item>
+        {trickTypes?.map((trickType: ListApparatusResult) => (
+          <Button
+            key={trickType.id}
+            variant="contained"
+            onClick={() => {
+              addToSquence(trickType)
+            }}
+            sx={{ mr: 2 }}
+          >
+            {trickType.name}
+          </Button>
+        ))}
+      </Grid>
       <Grid item xs={12} sx={{ my: 2 }}>
         <Divider />
       </Grid>
@@ -123,7 +125,13 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
         <Button
           variant="contained"
           onClick={() => {
-            setSearchParams({ apparatus: selectedApparatus?.id, sequence })
+            setInputError(false)
+            if (!selectedApparatus) {
+              setInputError(true)
+              return
+            }
+            const sequenceIds = sequence.map((trickType) => trickType.id)
+            setSearchParams({ apparatus_id: selectedApparatus?.id, sequence_ids: sequenceIds.join(',') })
           }}
         >
           Generate
@@ -145,7 +153,18 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
 }
 
 const ErrorState = () => {
-  return <>Error</>
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        m: 3,
+      }}
+    >
+      <ErrorIcon color="error" sx={{ mr: 1 }} />
+      <Typography color="error">Error loading generator data.</Typography>
+    </Box>
+  )
 }
 
 const LoadingState = () => {
@@ -157,11 +176,25 @@ const LoadingState = () => {
         width: 'calc(50% - 128px)',
         p: '1rem',
         my: '2rem',
+        borderRadius: '4px',
       }}
       justifyContent={'center'}
     >
-      <Grid item xs={1}>
-        <CircularProgress />
+      <Grid item xs={12} sx={{ mb: 2 }}>
+        <Box style={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      </Grid>
+      <Grid item xs={12} sx={{ mb: 2 }}>
+        <Divider />
+      </Grid>
+      <Grid item>
+        <Button variant="contained">Generate</Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" sx={{ ml: 2 }}>
+          Reset
+        </Button>
       </Grid>
     </Grid>
   )
