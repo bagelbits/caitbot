@@ -57,6 +57,11 @@ development:
 test:
   <<: *default
   database: caitbot_test
+  # Unset locally (falls back to the default socket connection); set in CI
+  # to reach the Postgres service container over TCP.
+  host: <%= ENV["DATABASE_HOST"] %>
+  username: <%= ENV["DATABASE_USERNAME"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -82,8 +87,8 @@ production:
   primary: &primary_production
     <<: *default
     database: caitbot_production
-    username: rails_app
-    password: <%= ENV["RAILS_APP_DATABASE_PASSWORD"] %>
+    username: caitbot
+    password: <%= ENV["CAITBOT_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: caitbot_production_cache

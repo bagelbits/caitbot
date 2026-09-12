@@ -16,8 +16,8 @@
       href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;600&display=swap"
     >
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# :app would link every top-level stylesheet, including ActiveAdmin's %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= stylesheet_pack_tag %>
     <%= javascript_pack_tag %>
