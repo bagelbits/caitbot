@@ -11,5 +11,5 @@ back_tuck = Trick.create!(name: "Back Tuck", description: "A backward somersault
 
 barani.apparatuses << trampoline
 full_twist.apparatuses << trampoline
-front_tuck.apparatuses << [trampoline, bars]
-back_tuck.apparatuses << [trampoline, bars]
+front_tuck.apparatuses << [ trampoline, bars ]
+back_tuck.apparatuses << [ trampoline, bars ]
