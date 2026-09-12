@@ -1,0 +1,13 @@
+<h2>Import Tricks from CSV</h2>
+
+<p>
+  Columns: <code>name</code>, <code>description</code>, <code>youtube_id</code> (optional),
+  <code>trick_type</code>, <code>apparatuses</code> (optional, semicolon-separated names).
+  Trick types and apparatuses are matched by name and created automatically if they don't
+  already exist.
+</p>
+
+<%= form_tag import_admin_tricks_path, multipart: true do %>
+  <%= file_field_tag :file, accept: "text/csv" %>
+  <%= submit_tag "Import" %>
+<% end %>
