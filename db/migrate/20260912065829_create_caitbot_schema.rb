@@ -26,7 +26,7 @@ class CreateCaitbotSchema < ActiveRecord::Migration[8.0]
       t.string :A, null: false
       t.string :B, null: false
     end
-    add_index :_ApparatusToTrick, [:A, :B], unique: true
+    add_index :_ApparatusToTrick, [ :A, :B ], unique: true
     add_index :_ApparatusToTrick, :B
     add_foreign_key :_ApparatusToTrick, :Apparatus, column: :A, on_delete: :cascade
     add_foreign_key :_ApparatusToTrick, :Trick, column: :B, on_delete: :cascade

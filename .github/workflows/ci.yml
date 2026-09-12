@@ -7,6 +7,36 @@ on:
     branches: [main, master]
 
 jobs:
+  scan_ruby:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Scan for security vulnerabilities
+        # -w2: report medium/high confidence findings only, skipping noise like
+        # "this Rails patch version's EOL is upcoming" that isn't an actual issue.
+        run: bin/brakeman -w2
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Lint code for consistent style
+        run: bin/rubocop -f github
+
   test:
     runs-on: ubuntu-latest
 
@@ -49,7 +79,9 @@ jobs:
         run: npm install
 
       - name: Set up database
-        run: bin/rails db:prepare
+        # db:prepare seeds a freshly created database, which the test suite
+        # doesn't want (db/seeds.rb data would pollute count-based assertions).
+        run: bin/rails db:create db:schema:load
         env:
           RAILS_ENV: test
 

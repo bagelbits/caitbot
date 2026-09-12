@@ -8,7 +8,7 @@ ActiveAdmin.register Trick do
     link_to "Import CSV", import_admin_tricks_path
   end
 
-  collection_action :import, method: [:get, :post] do
+  collection_action :import, method: [ :get, :post ] do
     if request.post?
       if params[:file].blank?
         redirect_to import_admin_tricks_path, alert: "Choose a CSV file first."

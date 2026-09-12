@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   namespace :api do
-    resources :apparatuses, only: [:index, :show]
-    resources :trick_types, only: [:index, :show]
-    resources :tricks, only: [:index, :show]
+    resources :apparatuses, only: [ :index, :show ]
+    resources :trick_types, only: [ :index, :show ]
+    resources :tricks, only: [ :index, :show ]
     get "generate_sequence", to: "sequences#generate"
   end
 
