@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Caitbot
 
-## Getting Started
+Caitbot generates randomized skill sequences for an apparatus (e.g. trampoline, bars). Pick an apparatus, add one or more trick types to the sequence, and hit **Generate** — the app picks a random trick of each requested type performed on that apparatus and displays it as an expandable list with its description.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Next.js 14](https://nextjs.org/) (App Router) + TypeScript
+- [MUI](https://mui.com/) for UI components
+- [SWR](https://swr.vercel.app/) for data fetching
+- [Prisma](https://www.prisma.io/) + PostgreSQL for data storage
+
+## Data model
+
+Defined in [`src/prisma/schema.prisma`](src/prisma/schema.prisma):
+
+- **Apparatus** — a piece of equipment (e.g. Trampoline, Bars)
+- **TrickType** — a category of trick (e.g. Twist, Flip)
+- **Trick** — a specific move, with a name, description, and optional YouTube ID; belongs to a `TrickType` and can be performed on multiple `Apparatus`
+
+## Getting started
+
+1. Create a `.env` file with a `DATABASE_URL` pointing to a PostgreSQL database, e.g. `DATABASE_URL="postgresql://user:password@localhost:5432/caitbot"`.
+2. Install dependencies and apply migrations:
+
+   ```bash
+   yarn install
+   yarn prisma migrate deploy
+   ```
+
+3. Run the dev server:
+
+   ```bash
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
+
+- `yarn dev` — start the dev server
+- `yarn build` — production build
+- `yarn start` — run the production build
+- `yarn lint` — lint the project
+
+## API routes
+
+All routes live under `src/app/api/`:
+
+- `GET /api/apparatuses`, `GET /api/apparatuses/[id]`
+- `GET /api/trick_types`, `GET /api/trick_types/[id]`
+- `GET /api/tricks`, `GET /api/tricks/[id]`
+- `GET /api/generate_sequence?apparatus_id=...&sequence_ids=...` — returns one random trick per requested trick type (`sequence_ids`, comma-separated) that's valid for the given apparatus
+
+## Project structure
+
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+src/
+  app/            Pages, layout, and API routes
+  components/
+    General/      Header, layout, and theme
+    SequenceGenerator/  Sequence builder UI, generated sequence display, trick accordion
+  prisma/         Schema and migrations
+  types/          Shared API types
+  utils/          Fetch helpers for SWR
+```
