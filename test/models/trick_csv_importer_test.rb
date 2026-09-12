@@ -17,7 +17,7 @@ class TrickCsvImporterTest < ActiveSupport::TestCase
 
     trick = Trick.find_by!(name: "Half Twist")
     assert_equal twist, trick.trick_type
-    assert_equal [ trampoline ], trick.apparatuses
+    assert_equal [ trampoline ], trick.apparatuses.to_a
   end
 
   test "creates trick types and apparatuses that don't exist yet" do
