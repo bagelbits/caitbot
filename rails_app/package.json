@@ -1,0 +1,45 @@
+{
+  "packageManager": "npm@11.19.0",
+  "name": "app",
+  "private": true,
+  "version": "0.1.0",
+  "browserslist": [
+    "defaults"
+  ],
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^5.18.0",
+    "@mui/material": "^5.18.0",
+    "@rspack/core": "2.2.3",
+    "compression-webpack-plugin": "^12.0.0",
+    "css-loader": "7.1.5",
+    "css-minimizer-webpack-plugin": "8.0.0",
+    "mini-css-extract-plugin": "2.10.2",
+    "prop-types": "15.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-on-rails": "17.0.0",
+    "rspack-manifest-plugin": "5.2.2",
+    "sass": "^1.104.0",
+    "sass-loader": "^16.0.8",
+    "shakapacker": "10.3.0",
+    "style-loader": "4.0.0",
+    "swr": "^2.5.1"
+  },
+  "devDependencies": {
+    "@rspack/cli": "2.2.3",
+    "@rspack/dev-server": "2.2.1",
+    "@rspack/plugin-react-refresh": "2.0.2",
+    "@swc/core": "1.16.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "react-refresh": "0.19.0",
+    "swc-loader": "0.2.7",
+    "typescript": "^7.0.2"
+  },
+  "scripts": {
+    "build": "RAILS_ENV=production NODE_ENV=production bin/shakapacker-precompile-hook && SHAKAPACKER_SKIP_PRECOMPILE_HOOK=true RAILS_ENV=production NODE_ENV=production bin/shakapacker",
+    "build:test": "RAILS_ENV=test NODE_ENV=test bin/shakapacker-precompile-hook && SHAKAPACKER_SKIP_PRECOMPILE_HOOK=true RAILS_ENV=test NODE_ENV=test bin/shakapacker"
+  }
+}
