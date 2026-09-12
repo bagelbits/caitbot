@@ -79,7 +79,9 @@ jobs:
         run: npm install
 
       - name: Set up database
-        run: bin/rails db:prepare
+        # db:prepare seeds a freshly created database, which the test suite
+        # doesn't want (db/seeds.rb data would pollute count-based assertions).
+        run: bin/rails db:create db:schema:load
         env:
           RAILS_ENV: test
 
