@@ -4,6 +4,26 @@ ActiveAdmin.register Trick do
   filter :name
   filter :trick_type
 
+  action_item :import, only: :index do
+    link_to "Import CSV", import_admin_tricks_path
+  end
+
+  collection_action :import, method: [:get, :post] do
+    if request.post?
+      if params[:file].blank?
+        redirect_to import_admin_tricks_path, alert: "Choose a CSV file first."
+        next
+      end
+
+      result = TrickCsvImporter.new(params[:file]).call
+      notice = "Imported #{result.created} trick(s)."
+      notice += " Errors: #{result.errors.join('; ')}" if result.errors.any?
+      redirect_to admin_tricks_path, notice: notice
+    else
+      render "admin/tricks/import"
+    end
+  end
+
   index do
     selectable_column
     id_column
