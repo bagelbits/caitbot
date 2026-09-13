@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.1"
+gem "rails", "~> 8.1.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
@@ -61,8 +61,8 @@ end
 
 gem "shakapacker", "~> 10.3.2"
 
-gem "react_on_rails", "= 17.0"
+gem "react_on_rails", "17.0.1"
 
-gem "json", "< 3.0"
+gem "json", "< 4.0"
 
-gem "activeadmin", "= 3.5"
+gem "activeadmin", "3.5.2"
