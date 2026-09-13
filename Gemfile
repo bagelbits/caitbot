@@ -63,6 +63,6 @@ gem "shakapacker", "~> 10.3.2"
 
 gem "react_on_rails", "17.0.1"
 
-gem "json", "< 3.0"
+gem "json", "< 4.0"
 
 gem "activeadmin", "3.5.2"
