@@ -8,10 +8,6 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "react_on_rails"
-    groups:
-      rails:
-        patterns:
-          - "*"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -19,16 +15,8 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "react-on-rails"
-    groups:
-      npm-deps:
-        patterns:
-          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    groups:
-      actions:
-        patterns:
-          - "*"
