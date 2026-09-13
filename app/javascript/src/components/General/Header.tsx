@@ -20,7 +20,21 @@ const Header = () => {
             Practice sequence generator
           </Typography>
         </Box>
-        <Link href="/admin" underline="hover" sx={{ color: 'secondary.light', fontSize: '0.875rem' }}>
+        <Link
+          href="/admin"
+          underline="none"
+          sx={{
+            color: 'secondary.light',
+            fontSize: '0.875rem',
+            px: '10px',
+            py: '5px',
+            borderRadius: '10px',
+            '&:hover': {
+              backgroundColor: 'secondary.main',
+              color: 'background.default',
+            },
+          }}
+        >
           Coach admin
         </Link>
       </Toolbar>
