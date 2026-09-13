@@ -1,0 +1,66 @@
+/* Mirrors the sequence generator's training-floor palette onto ActiveAdmin's
+   stock skin: Spring Floor header, Chalk title bar, Pad Red actions. */
+
+body,
+#header ul.tabs > li a,
+a.button,
+a:link.button,
+a:visited.button,
+input[type="submit"],
+input[type="button"],
+button {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+}
+
+#header {
+  background-color: #1f4d3a;
+  background-image: none;
+  border-bottom: 1px solid #123326;
+}
+
+#header h1,
+#header a,
+#header a:link {
+  color: #f6f3ec;
+}
+
+#header ul.tabs > li.current > a,
+#header ul.tabs > li:hover > a {
+  background: #6b8f71;
+  color: #f6f3ec;
+}
+
+#title_bar {
+  background-color: #f6f3ec;
+  background-image: none;
+  border-color: #cfc9b8;
+  color: #3a3f3b;
+}
+
+#title_bar h2 {
+  color: #3a3f3b;
+}
+
+a.button,
+a:link.button,
+a:visited.button,
+input[type="submit"],
+input[type="button"],
+button {
+  background-color: #c1401f;
+  background-image: none;
+  text-shadow: none;
+  border-color: #963118;
+  color: #f6f3ec;
+  border-radius: 6px;
+}
+
+a.button:not(.disabled):hover,
+a:link.button:not(.disabled):hover,
+a:visited.button:not(.disabled):hover,
+input[type="submit"]:not(.disabled):hover,
+input[type="button"]:not(.disabled):hover,
+button:not(.disabled):hover {
+  background-color: #a3341a;
+  background-image: none;
+}

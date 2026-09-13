@@ -24,9 +24,9 @@ const PageComponent = ({ searchParams }: ComponentParams) => {
   const sequence: ListTrickResult[] = data?.sequence
 
   return (
-    <Box width="90%">
+    <Box sx={{ mt: 4 }}>
       {sequence?.map((trick: ListTrickResult, index) => (
-        <TrickAccordion.PageComponent key={index} trick={trick} />
+        <TrickAccordion.PageComponent key={index} trick={trick} position={index + 1} />
       ))}
     </Box>
   )
@@ -49,10 +49,10 @@ const ErrorState = () => {
 
 const LoadingState = () => {
   return (
-    <Box width="90%">
-      <TrickAccordion.LoadingState />
-      <TrickAccordion.LoadingState />
-      <TrickAccordion.LoadingState />
+    <Box sx={{ mt: 4 }}>
+      <TrickAccordion.LoadingState position={1} />
+      <TrickAccordion.LoadingState position={2} />
+      <TrickAccordion.LoadingState position={3} />
     </Box>
   )
 }

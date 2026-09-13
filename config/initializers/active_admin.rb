@@ -232,6 +232,7 @@ ActiveAdmin.setup do |config|
   #
   # To load a javascript file:
   #   config.register_javascript 'my_javascript.js'
+  config.register_stylesheet "active_admin_custom.css"
 
   # == CSV options
   #
@@ -327,7 +328,7 @@ ActiveAdmin.setup do |config|
   # You can add your own content to the site head like analytics. Make sure
   # you only pass content you trust.
   #
-  # config.head = ''.html_safe
+  config.head = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;900&display=swap">'.html_safe
 
   # == Footer
   #
