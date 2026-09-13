@@ -29,7 +29,7 @@ class TrickCsvImporter
 
     Result.new(created, errors)
   rescue CSV::MalformedCSVError => e
-    Result.new(0, ["Could not parse CSV: #{e.message}"])
+    Result.new(0, [ "Could not parse CSV: #{e.message}" ])
   end
 
   private

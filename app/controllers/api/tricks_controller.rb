@@ -14,7 +14,7 @@ class Api::TricksController < Api::BaseController
       createdAt: trick.created_at,
       updatedAt: trick.updated_at,
       trickType: trick.trick_type && { id: trick.trick_type.id, name: trick.trick_type.name },
-      Apparatus: trick.apparatuses.map { |a| { id: a.id, name: a.name } },
+      Apparatus: trick.apparatuses.map { |a| { id: a.id, name: a.name } }
     }
   end
 end

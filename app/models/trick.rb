@@ -11,6 +11,6 @@ class Trick < ApplicationRecord
   validates :description, presence: true
 
   def self.ransackable_associations(_auth_object = nil)
-    ["trick_type", "apparatuses"]
+    [ "trick_type", "apparatuses" ]
   end
 end
