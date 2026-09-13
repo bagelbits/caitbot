@@ -61,7 +61,7 @@ end
 
 gem "shakapacker", "~> 10.3.2"
 
-gem "react_on_rails", "= 17.0"
+gem "react_on_rails", "17.0.1"
 
 gem "json", "< 3.0"
 
