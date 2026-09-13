@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Box } from '@mui/material'
 import Header from '../General/Header'
 import SequenceBuilder from './SequenceBuilder'
 import { useState } from 'react'
@@ -8,12 +8,13 @@ const SequenceGenerator = () => {
   const [searchParams, setSearchParams] = useState({})
 
   return (
-    <Grid container justifyContent="center">
+    <Box>
       <Header />
-      <SequenceBuilder.PageComponent setSearchParams={setSearchParams} />
-      <Grid item xs={12}></Grid>
-      {!!Object.keys(searchParams).length && <Sequence.PageComponent searchParams={searchParams} />}
-    </Grid>
+      <Box sx={{ maxWidth: 640, mx: 'auto', px: 2, py: 4 }}>
+        <SequenceBuilder.PageComponent setSearchParams={setSearchParams} />
+        {!!Object.keys(searchParams).length && <Sequence.PageComponent searchParams={searchParams} />}
+      </Box>
+    </Box>
   )
 }
 

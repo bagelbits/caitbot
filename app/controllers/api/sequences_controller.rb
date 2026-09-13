@@ -8,7 +8,7 @@ class Api::SequencesController < Api::BaseController
       return
     end
 
-    sequence = sequence_ids.map do |trick_type_id|
+    sequence = sequence_ids.filter_map do |trick_type_id|
       Trick.joins(:apparatuses)
            .where(apparatuses: { id: apparatus_id }, trickTypeId: trick_type_id)
            .select(:id, :name)

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 import {
   Autocomplete,
   Box,
@@ -6,19 +6,27 @@ import {
   Chip,
   CircularProgress,
   Divider,
-  Grid,
   ListItem,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
 import useSWR from 'swr'
 import ErrorIcon from '@mui/icons-material/Error'
 
-import { fetcher } from '../../utils/fetcher'
+import { fetcher, fetcherWithQueryString } from '../../utils/fetcher'
 import { ListApparatusResult, ListTrickTypeResult } from '../../types/api'
 
 interface ComponentParams {
   setSearchParams: (searchParams: {}) => void
+}
+
+/** The "floor panel": a bordered surface, like a frame edge, holding the builder controls. */
+const panelSx = {
+  border: '1px solid',
+  borderColor: 'divider',
+  borderRadius: 3,
+  p: 3,
 }
 
 const PageComponent = ({ setSearchParams }: ComponentParams) => {
@@ -27,20 +35,25 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
     error: apparatusesError,
     isLoading: apparatusesIsLoading,
   } = useSWR('/api/apparatuses', fetcher)
-  const {
-    data: trickTypes,
-    error: trickTypesError,
-    isLoading: trickTypesIsLoading,
-  } = useSWR('/api/trick_types', fetcher)
   const [selectedApparatus, setSelectedApparatus] = useState<ListApparatusResult | null>(null)
   const [sequence, setSequence] = useState<ListTrickTypeResult[]>([])
   const [inputError, setInputError] = useState(false)
 
-  if (apparatusesError || trickTypesError) return <ErrorState />
-  if (apparatusesIsLoading || trickTypesIsLoading) return <LoadingState />
+  const {
+    data: trickTypes,
+    error: trickTypesError,
+    isLoading: trickTypesIsLoading,
+  } = useSWR(
+    selectedApparatus ? ['/api/trick_types', { apparatus_id: selectedApparatus.id }] : null,
+    ([url, params]) => fetcherWithQueryString(url, params)
+  )
+
+  if (apparatusesError) return <ErrorState />
+  if (apparatusesIsLoading) return <LoadingState />
 
   const onChange = (event: React.ChangeEvent<{}>, value: ListApparatusResult | null) => {
     setSelectedApparatus(value)
+    setSequence([])
   }
 
   const addToSquence = (trickType: ListTrickTypeResult) => {
@@ -53,77 +66,64 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
   }
 
   return (
-    <Grid
-      container
-      sx={{
-        backgroundColor: 'primary.light',
-        width: 'calc(50% - 128px)',
-        p: '1rem',
-        my: '2rem',
-        borderRadius: '4px',
-      }}
-      justifyContent={'center'}
-    >
-      <Grid item xs={12}>
-        <Autocomplete
-          color="secondary"
-          options={apparatuses as ListApparatusResult[]}
-          getOptionLabel={(option) => option.name}
-          onChange={onChange}
-          renderOption={(props, option, { selected }) => {
-            return (
-              <ListItem {...props} key={option.id}>
-                {option.name}
-              </ListItem>
-            )
-          }}
-          renderInput={(params) => (
-            <TextField {...params} color="secondary" label="Apparatuses" required error={inputError} />
-          )}
-        />
-      </Grid>
-      <Grid item xs={12} sx={{ my: 2 }}>
-        <Autocomplete
-          clearIcon={false}
-          options={[]}
-          value={sequence}
-          disabled
-          freeSolo
-          multiple
-          renderTags={(value: ListTrickTypeResult[], props) =>
-            value.map((option, index) => (
-              <Chip
-                key={index}
-                label={option.name}
-                onDelete={() => {
-                  handleDelete(index)
-                }}
-              />
-            ))
-          }
-          renderInput={(params) => <TextField label="Add Tags" {...params} />}
-        />
-      </Grid>
-      <Grid item>
-        {trickTypes?.map((trickType: ListApparatusResult) => (
-          <Button
-            key={trickType.id}
-            variant="contained"
-            onClick={() => {
-              addToSquence(trickType)
-            }}
-            sx={{ mr: 2 }}
-          >
-            {trickType.name}
-          </Button>
+    <Box sx={panelSx}>
+      <Autocomplete
+        options={apparatuses as ListApparatusResult[]}
+        getOptionLabel={(option) => option.name}
+        onChange={onChange}
+        renderOption={(props, option) => (
+          <ListItem {...props} key={option.id}>
+            {option.name}
+          </ListItem>
+        )}
+        renderInput={(params) => <TextField {...params} label="Apparatus" required error={inputError} />}
+      />
+
+      <Stack direction="row" spacing={1} sx={{ mt: 3, flexWrap: 'wrap', rowGap: 1, minHeight: 36 }} alignItems="center">
+        {!selectedApparatus && (
+          <Typography variant="body2" color="text.secondary">
+            Choose an apparatus to see its trick types.
+          </Typography>
+        )}
+        {selectedApparatus && trickTypesIsLoading && <CircularProgress size={20} />}
+        {selectedApparatus && trickTypesError && (
+          <Typography variant="body2" color="error">
+            Couldn't load trick types.
+          </Typography>
+        )}
+        {selectedApparatus &&
+          trickTypes?.map((trickType: ListApparatusResult) => (
+            <Button
+              key={trickType.id}
+              variant="outlined"
+              color="secondary"
+              onClick={() => {
+                addToSquence(trickType)
+              }}
+            >
+              Add {trickType.name}
+            </Button>
+          ))}
+      </Stack>
+
+      <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: 'wrap', rowGap: 1, minHeight: 32 }}>
+        {sequence.length === 0 && (
+          <Typography variant="body2" color="text.secondary">
+            No tricks added yet.
+          </Typography>
+        )}
+        {sequence.map((trickType, index) => (
+          <Chip key={index} label={trickType.name} variant="outlined" onDelete={() => handleDelete(index)} />
         ))}
-      </Grid>
-      <Grid item xs={12} sx={{ my: 2 }}>
-        <Divider />
-      </Grid>
-      <Grid item>
+      </Stack>
+
+      <Divider sx={{ my: 3 }} />
+
+      <Stack direction="row" spacing={2} alignItems="center">
         <Button
           variant="contained"
+          color="error"
+          size="large"
           onClick={() => {
             setInputError(false)
             if (!selectedApparatus) {
@@ -136,19 +136,17 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
         >
           Generate
         </Button>
-      </Grid>
-      <Grid item>
         <Button
-          variant="contained"
+          variant="text"
+          color="inherit"
           onClick={() => {
             setSequence([])
           }}
-          sx={{ ml: 2 }}
         >
           Reset
         </Button>
-      </Grid>
-    </Grid>
+      </Stack>
+    </Box>
   )
 }
 
@@ -169,34 +167,9 @@ const ErrorState = () => {
 
 const LoadingState = () => {
   return (
-    <Grid
-      container
-      sx={{
-        backgroundColor: 'primary.light',
-        width: 'calc(50% - 128px)',
-        p: '1rem',
-        my: '2rem',
-        borderRadius: '4px',
-      }}
-      justifyContent={'center'}
-    >
-      <Grid item xs={12} sx={{ mb: 2 }}>
-        <Box style={{ display: 'flex', justifyContent: 'center' }}>
-          <CircularProgress />
-        </Box>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 2 }}>
-        <Divider />
-      </Grid>
-      <Grid item>
-        <Button variant="contained">Generate</Button>
-      </Grid>
-      <Grid item>
-        <Button variant="contained" sx={{ ml: 2 }}>
-          Reset
-        </Button>
-      </Grid>
-    </Grid>
+    <Box sx={{ ...panelSx, display: 'flex', justifyContent: 'center' }}>
+      <CircularProgress />
+    </Box>
   )
 }
 
