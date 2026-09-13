@@ -65,4 +65,4 @@ gem "react_on_rails", "= 17.0"
 
 gem "json", "< 3.0"
 
-gem "activeadmin", "= 3.5"
+gem "activeadmin", "3.5.2"
