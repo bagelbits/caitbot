@@ -30,6 +30,16 @@ button {
   color: #f6f3ec;
 }
 
+/* Matches the app-side "Coach admin" link's quiet moss-to-chalk hover. */
+#header #utility_nav a {
+  color: #89a58d;
+}
+
+#header #utility_nav a:hover {
+  color: #f6f3ec;
+  text-decoration: underline;
+}
+
 #title_bar {
   background-color: #f6f3ec;
   background-image: none;
