@@ -1,9 +1,13 @@
 version: 2
 updates:
+  # react_on_rails' gem and npm package versions must match, and Dependabot
+  # can't bump them together across ecosystems in one PR — bump both by hand.
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "react_on_rails"
     groups:
       rails:
         patterns:
@@ -13,6 +17,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "react-on-rails"
     groups:
       npm-deps:
         patterns:
