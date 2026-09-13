@@ -1,6 +1,10 @@
 class Api::TrickTypesController < Api::BaseController
   def index
-    render json: TrickType.select(:id, :name)
+    scope = TrickType.select(:id, :name)
+    if params[:apparatus_id].present?
+      scope = scope.joins(tricks: :apparatuses).where(Apparatus.table_name => { id: params[:apparatus_id] }).distinct
+    end
+    render json: scope
   end
 
   def show

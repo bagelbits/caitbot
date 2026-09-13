@@ -14,7 +14,7 @@ import {
 import useSWR from 'swr'
 import ErrorIcon from '@mui/icons-material/Error'
 
-import { fetcher } from '../../utils/fetcher'
+import { fetcher, fetcherWithQueryString } from '../../utils/fetcher'
 import { ListApparatusResult, ListTrickTypeResult } from '../../types/api'
 
 interface ComponentParams {
@@ -35,20 +35,25 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
     error: apparatusesError,
     isLoading: apparatusesIsLoading,
   } = useSWR('/api/apparatuses', fetcher)
-  const {
-    data: trickTypes,
-    error: trickTypesError,
-    isLoading: trickTypesIsLoading,
-  } = useSWR('/api/trick_types', fetcher)
   const [selectedApparatus, setSelectedApparatus] = useState<ListApparatusResult | null>(null)
   const [sequence, setSequence] = useState<ListTrickTypeResult[]>([])
   const [inputError, setInputError] = useState(false)
 
-  if (apparatusesError || trickTypesError) return <ErrorState />
-  if (apparatusesIsLoading || trickTypesIsLoading) return <LoadingState />
+  const {
+    data: trickTypes,
+    error: trickTypesError,
+    isLoading: trickTypesIsLoading,
+  } = useSWR(
+    selectedApparatus ? ['/api/trick_types', { apparatus_id: selectedApparatus.id }] : null,
+    ([url, params]) => fetcherWithQueryString(url, params)
+  )
+
+  if (apparatusesError) return <ErrorState />
+  if (apparatusesIsLoading) return <LoadingState />
 
   const onChange = (event: React.ChangeEvent<{}>, value: ListApparatusResult | null) => {
     setSelectedApparatus(value)
+    setSequence([])
   }
 
   const addToSquence = (trickType: ListTrickTypeResult) => {
@@ -74,19 +79,31 @@ const PageComponent = ({ setSearchParams }: ComponentParams) => {
         renderInput={(params) => <TextField {...params} label="Apparatus" required error={inputError} />}
       />
 
-      <Stack direction="row" spacing={1} sx={{ mt: 3, flexWrap: 'wrap', rowGap: 1 }}>
-        {trickTypes?.map((trickType: ListApparatusResult) => (
-          <Button
-            key={trickType.id}
-            variant="outlined"
-            color="secondary"
-            onClick={() => {
-              addToSquence(trickType)
-            }}
-          >
-            Add {trickType.name}
-          </Button>
-        ))}
+      <Stack direction="row" spacing={1} sx={{ mt: 3, flexWrap: 'wrap', rowGap: 1, minHeight: 36 }} alignItems="center">
+        {!selectedApparatus && (
+          <Typography variant="body2" color="text.secondary">
+            Choose an apparatus to see its trick types.
+          </Typography>
+        )}
+        {selectedApparatus && trickTypesIsLoading && <CircularProgress size={20} />}
+        {selectedApparatus && trickTypesError && (
+          <Typography variant="body2" color="error">
+            Couldn't load trick types.
+          </Typography>
+        )}
+        {selectedApparatus &&
+          trickTypes?.map((trickType: ListApparatusResult) => (
+            <Button
+              key={trickType.id}
+              variant="outlined"
+              color="secondary"
+              onClick={() => {
+                addToSquence(trickType)
+              }}
+            >
+              Add {trickType.name}
+            </Button>
+          ))}
       </Stack>
 
       <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: 'wrap', rowGap: 1, minHeight: 32 }}>
