@@ -28,7 +28,7 @@
     "swr": "^2.5.1"
   },
   "devDependencies": {
-    "@rspack/cli": "2.2.3",
+    "@rspack/cli": "2.2.5",
     "@rspack/dev-server": "2.2.1",
     "@rspack/plugin-react-refresh": "2.0.2",
     "@swc/core": "1.16.2",
