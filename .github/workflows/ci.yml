@@ -16,6 +16,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3"
           bundler-cache: true
 
       - name: Scan for security vulnerabilities
@@ -32,6 +33,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3"
           bundler-cache: true
 
       - name: Lint code for consistent style
@@ -65,7 +67,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # ruby-version: "3.3"  # Uncomment and set if you don't have a .ruby-version file
+          ruby-version: "3.3"
           bundler-cache: true
 
       - name: Set up Node
